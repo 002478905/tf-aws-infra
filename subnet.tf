@@ -1,58 +1,58 @@
 # Public Subnets
 resource "aws_subnet" "public_subnet_1" {
   vpc_id                  = aws_vpc.csye6225_vpc.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = "us-east-1a"
+  cidr_block              = var.public_subnet_1_cidr
+  availability_zone       = var.public_subnet_1_az
   map_public_ip_on_launch = true
   tags = {
-    Name = "Public Subnet 1"
+    Name = var.public_subnet_1_name
   }
 }
 
 resource "aws_subnet" "public_subnet_2" {
   vpc_id                  = aws_vpc.csye6225_vpc.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "us-east-1b"
+  cidr_block              = var.public_subnet_2_cidr
+  availability_zone       = var.public_subnet_2_az
   map_public_ip_on_launch = true
   tags = {
-    Name = "Public Subnet 2"
+    Name = var.public_subnet_2_name
   }
 }
 
 resource "aws_subnet" "public_subnet_3" {
   vpc_id                  = aws_vpc.csye6225_vpc.id
-  cidr_block              = "10.0.3.0/24"
-  availability_zone       = "us-east-1c"
+  cidr_block              = var.public_subnet_3_cidr
+  availability_zone       = var.public_subnet_3_az
   map_public_ip_on_launch = true
   tags = {
-    Name = "Public Subnet 3"
+    Name = var.public_subnet_3_name
   }
 }
 
 # Private Subnets
 resource "aws_subnet" "private_subnet_1" {
   vpc_id            = aws_vpc.csye6225_vpc.id
-  cidr_block        = "10.0.4.0/24"
-  availability_zone = "us-east-1a"
+  cidr_block        = var.private_subnet_1_cidr
+  availability_zone = var.private_subnet_1_az
   tags = {
-    Name = "Private Subnet 1"
+    Name = var.private_subnet_1_name
   }
 }
 
 resource "aws_subnet" "private_subnet_2" {
   vpc_id            = aws_vpc.csye6225_vpc.id
-  cidr_block        = "10.0.5.0/24"
-  availability_zone = "us-east-1b"
+  cidr_block        = var.private_subnet_2_cidr
+  availability_zone = var.private_subnet_2_az
   tags = {
-    Name = "Private Subnet 2"
+    Name = var.private_subnet_2_name
   }
 }
 
 resource "aws_subnet" "private_subnet_3" {
   vpc_id            = aws_vpc.csye6225_vpc.id
-  cidr_block        = "10.0.6.0/24"
-  availability_zone = "us-east-1c"
+  cidr_block        = var.private_subnet_3_cidr
+  availability_zone = var.private_subnet_3_az
   tags = {
-    Name = "Private Subnet 3"
+    Name = var.private_subnet_3_name
   }
 }
