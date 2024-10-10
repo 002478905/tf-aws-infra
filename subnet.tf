@@ -7,7 +7,7 @@ resource "aws_subnet" "public_subnet_1" {
   tags = {
     Name = "Public Subnet 1"
   }
-
+}
 
 resource "aws_subnet" "public_subnet_2" {
   vpc_id                  = aws_vpc.csye6225_vpc.id
