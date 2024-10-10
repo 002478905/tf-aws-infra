@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-      - dev
 
   workflow_dispatch:
 
@@ -14,18 +13,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code
+      # Step 1: Check out the repository
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      # Step 2: Install Terraform
+      # Step 2: Set up Terraform
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2
 
-      # Step 3: Terraform fmt (to check formatting)
-      - name: Run terraform fmt
+      # Step 3: Check if Terraform files are formatted correctly
+      - name: Terraform Format Check
         run: terraform fmt -check -recursive
 
-      # Step 4: Terraform validate (to check syntax)
-      - name: Run terraform validate
+      # Step 4: Initialize Terraform
+      - name: Terraform Init
+        run: terraform init
+
+      # Step 5: Validate Terraform code
+      - name: Terraform Validate
         run: terraform validate
+
+      # Step 6: Replace set-output (Use Environment Files)
+      - name: Set environment variable
+        run: echo "name=terraform_output::value" >> $GITHUB_ENV
