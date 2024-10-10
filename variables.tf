@@ -94,3 +94,14 @@ variable "private_subnet_3_name" {
   type        = string
   description = "Name for Private Subnet 3"
 }
+variable "aws_region" {
+  description = "The AWS region to deploy resources in"
+  type        = string
+  default     = "us-east-1" # Default region
+}
+
+variable "aws_profile" {
+  description = "The AWS CLI profile to use"
+  type        = string
+  default     = "dev" # Default profile
+}

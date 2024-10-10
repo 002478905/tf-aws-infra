@@ -1,4 +1,4 @@
 provider "aws" {
-  region  = "us-east-1"
-  profile = "dev" # Add this line to specify the AWS CLI profile
+  region  = var.aws_region
+  profile = var.aws_profile
 }
