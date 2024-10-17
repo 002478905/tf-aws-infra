@@ -105,3 +105,15 @@ variable "aws_profile" {
   type        = string
   default     = "dev" # Default profile
 }
+
+# variables.tf
+variable "custom_ami" {
+  description = "ID of the custom AMI to use"
+  type        = string
+}
+
+variable "app_port" {
+  description = "Port where the application runs"
+  type        = number
+  default     = 8080  # Change this to your application port
+}
