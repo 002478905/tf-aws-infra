@@ -1,8 +1,8 @@
 variable "cidr" {
-  type = string
-  #default = "10.0.0.0/16"
+  type        = string
   description = "value"
 }
+
 # Public Subnet Variables
 variable "public_subnet_1_cidr" {
   type        = string
@@ -94,6 +94,7 @@ variable "private_subnet_3_name" {
   type        = string
   description = "Name for Private Subnet 3"
 }
+
 variable "aws_region" {
   description = "The AWS region to deploy resources in"
   type        = string
@@ -106,7 +107,6 @@ variable "aws_profile" {
   default     = "dev" # Default profile
 }
 
-# variables.tf
 variable "custom_ami" {
   description = "ID of the custom AMI to use"
   type        = string

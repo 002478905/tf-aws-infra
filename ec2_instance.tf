@@ -35,8 +35,8 @@ resource "aws_security_group" "app_security_group" {
   # Application-specific port (replace 8080 with your app's port)
   ingress {
     description = "Allow Application Traffic"
-  from_port   = var.app_port  # Use the variable
-  to_port     = var.app_port
+    from_port   = var.app_port  # Use the variable
+    to_port     = var.app_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -66,8 +66,8 @@ resource "aws_instance" "web_app_instance" {
 
   # Root volume settings
   root_block_device {
-    volume_size = 25
-    volume_type = "gp2"
+    volume_size           = 25
+    volume_type           = "gp2"
     delete_on_termination = true
   }
 
