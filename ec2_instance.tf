@@ -2,7 +2,7 @@
 resource "aws_security_group" "app_security_group" {
   vpc_id = aws_vpc.csye6225_vpc.id
 
-  name        = "app_security_group"
+  name        = "application security group"
   description = "Allow inbound traffic for web app"
 
   # SSH Access
