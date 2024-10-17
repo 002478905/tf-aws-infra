@@ -115,5 +115,5 @@ variable "custom_ami" {
 variable "app_port" {
   description = "Port where the application runs"
   type        = number
-  default     = 8080  # Change this to your application port
+  default     = 8080 # Change this to your application port
 }
