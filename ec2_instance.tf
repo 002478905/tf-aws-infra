@@ -2,10 +2,10 @@
 resource "aws_security_group" "app_security_group" {
   vpc_id = aws_vpc.csye6225_vpc.id
 
-  name        = "application security group"
+  name        = "application_security_group"
   description = "Allow inbound traffic for web app"
 
-  # SSH Access
+  # SSH Access (allowing from anywhere, modify based on requirements)
   ingress {
     description = "Allow SSH"
     from_port   = 22
@@ -14,7 +14,7 @@ resource "aws_security_group" "app_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # HTTP Access
+  # HTTP Access (Port 80)
   ingress {
     description = "Allow HTTP"
     from_port   = 80
@@ -23,7 +23,7 @@ resource "aws_security_group" "app_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # HTTPS Access
+  # HTTPS Access (Port 443)
   ingress {
     description = "Allow HTTPS"
     from_port   = 443
@@ -32,10 +32,10 @@ resource "aws_security_group" "app_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Application-specific port (replace 8080 with your app's port)
+  # Application-specific port (Replace 8080 with your application's port, using variable for flexibility)
   ingress {
     description = "Allow Application Traffic"
-    from_port   = var.app_port # Use the variable
+    from_port   = var.app_port
     to_port     = var.app_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
@@ -56,10 +56,10 @@ resource "aws_security_group" "app_security_group" {
 
 # Create EC2 Instance
 resource "aws_instance" "web_app_instance" {
-  ami                    = "ami-037a200849f9c67d5" # Replace with your custom AMI ID
+  ami                    = var.custom_ami  # Use the custom AMI built by Packer
   instance_type          = "t2.small"
-  subnet_id              = aws_subnet.public_subnet_1.id              # Place the instance in one of your public subnets
-  vpc_security_group_ids = [aws_security_group.app_security_group.id] # Attach the security group
+  subnet_id              = aws_subnet.public_subnet_1.id  # Place the instance in one of your public subnets
+  vpc_security_group_ids = [aws_security_group.app_security_group.id]  # Attach the security group
 
   # Disable protection against accidental termination
   disable_api_termination = false
@@ -70,6 +70,19 @@ resource "aws_instance" "web_app_instance" {
     volume_type           = "gp2"
     delete_on_termination = true
   }
+
+  # User Data to pass RDS details to the EC2 instance for database connection
+  user_data = <<-EOF
+    #!/bin/bash
+    echo "DB_HOST=${aws_db_instance.rds_instance.endpoint}" >> /home/ubuntu/.env
+    echo "DB_USER=csye6225" >> /home/ubuntu/.env
+    echo "DB_PASSWORD=strongpassword" >> /home/ubuntu/.env
+    echo "DB_NAME=csye6225" >> /home/ubuntu/.env
+    sudo systemctl restart app  # Restart the app to pick up new environment variables
+  EOF
+
+  # Optional: Add monitoring and instance lifecycle hooks
+  monitoring = true
 
   tags = {
     Name = "web_app_instance"
