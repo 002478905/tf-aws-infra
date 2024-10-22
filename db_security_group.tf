@@ -6,10 +6,10 @@ resource "aws_security_group" "db_security_group" {
 
   # Allow only the EC2 instance to connect to the RDS instance on PostgreSQL port (5432)
   ingress {
-    from_port        = 5432
-    to_port          = 5432
-    protocol         = "tcp"
-    security_groups  = [aws_security_group.app_security_group.id]  # Only allow traffic from EC2 Security Group
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.app_security_group.id] # Only allow traffic from EC2 Security Group
   }
 
   egress {
