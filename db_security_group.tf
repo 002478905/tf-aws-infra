@@ -4,14 +4,7 @@ resource "aws_security_group" "db_security_group" {
   description = "Security group for RDS instance"
   vpc_id      = aws_vpc.csye6225_vpc.id
 
-  # Allow only the EC2 instance to connect to the RDS instance on PostgreSQL port (5432)
-  ingress {
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
-    security_groups = [aws_security_group.app_security_group.id] # Only allow traffic from EC2 Security Group
-  }
-
+  # Allow all outbound traffic
   egress {
     from_port   = 0
     to_port     = 0
@@ -22,4 +15,14 @@ resource "aws_security_group" "db_security_group" {
   tags = {
     Name = "db_security_group"
   }
+}
+
+# Ingress rule to allow traffic from EC2 instance (app_security_group)
+resource "aws_security_group_rule" "allow_app_to_db" {
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.db_security_group.id  # RDS DB Security Group
+  source_security_group_id = aws_security_group.app_security_group.id # App Security Group
 }
