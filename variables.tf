@@ -115,5 +115,56 @@ variable "custom_ami" {
 variable "app_port" {
   description = "Port where the application runs"
   type        = number
-  default     = 8080 # Change this to your application port
+  default     = 8081 # Change this to your application port
+}
+
+variable "family" {
+  description = "Port where the application runs"
+  type        = string
+  
+}
+
+# variables.tf
+
+variable "rds_identifier" {
+  description = "The RDS instance identifier"
+  type        = string
+  default     = "csye6225"
+}
+
+variable "rds_engine" {
+  description = "The database engine for RDS"
+  type        = string
+  default     = "postgres"
+}
+
+variable "rds_instance_class" {
+  description = "The instance class for the RDS instance"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "rds_allocated_storage" {
+  description = "The allocated storage in GB for the RDS instance"
+  type        = number
+  default     = 20
+}
+
+variable "rds_db_name" {
+  description = "The name of the RDS database"
+  type        = string
+  default     = "webapp"
+}
+
+variable "rds_username" {
+  description = "The username for the RDS instance"
+  type        = string
+  default     = "postgres"
+}
+
+variable "rds_password" {
+  description = "The password for the RDS instance"
+  type        = string
+  sensitive   = true
+  default     = "root12345"
 }

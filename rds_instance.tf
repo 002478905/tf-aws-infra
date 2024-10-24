@@ -4,13 +4,16 @@ resource "aws_db_instance" "rds_instance" {
   engine                 = "postgres"
   instance_class         = "db.t3.micro"
   allocated_storage      = 20
-  db_name                = "csye6225"
-  username               = "csye6225"
-  password               = "strongpassword"
+  db_name                = "webapp"
+  username               = "postgres"
+  password               = "root12345"
   db_subnet_group_name   = aws_db_subnet_group.private_subnet_group.name
   vpc_security_group_ids = [aws_security_group.db_security_group.id]
   publicly_accessible    = false
   skip_final_snapshot    = true
+
+ # Attach the parameter group here
+  parameter_group_name   = aws_db_parameter_group.parameter-group.name
 
   tags = {
     Name = "csye6225-db"
