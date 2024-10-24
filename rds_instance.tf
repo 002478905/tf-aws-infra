@@ -12,8 +12,8 @@ resource "aws_db_instance" "rds_instance" {
   publicly_accessible    = false
   skip_final_snapshot    = true
 
- # Attach the parameter group here
-  parameter_group_name   = aws_db_parameter_group.parameter-group.name
+  # Attach the parameter group here
+  parameter_group_name = aws_db_parameter_group.parameter-group.name
 
   tags = {
     Name = "csye6225-db"

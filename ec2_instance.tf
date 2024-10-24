@@ -23,7 +23,7 @@ resource "aws_security_group" "app_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
- # HTTP Access (Port 80)
+  # HTTP Access (Port 80)
   ingress {
     description = "Allow HTTP"
     from_port   = 8080

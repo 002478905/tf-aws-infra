@@ -121,7 +121,7 @@ variable "app_port" {
 variable "family" {
   description = "Port where the application runs"
   type        = string
-  
+
 }
 
 # variables.tf
