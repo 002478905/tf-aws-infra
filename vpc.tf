@@ -7,3 +7,4 @@ resource "aws_vpc" "csye6225_vpc" {
 
 
 }
+# Private Subnet 1
