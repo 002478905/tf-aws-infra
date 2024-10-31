@@ -22,7 +22,7 @@ resource "aws_db_instance" "rds_instance" {
 
 # DB Subnet Group for RDS
 resource "aws_db_subnet_group" "private_subnet_group" {
-  name        = "private-subnet-group"
+  name        = "private-subnet-group-un"
   description = "Subnet group for RDS instance"
   subnet_ids = [
     aws_subnet.private_subnet_1.id,
