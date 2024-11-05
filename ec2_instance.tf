@@ -78,7 +78,7 @@ resource "aws_instance" "web_app_instance" {
               sudo sed -i 's|Environment="DB_USER=postgres"|Environment="DB_USER=${var.rds_username}"|g' /etc/systemd/system/app.service
               sudo sed -i 's|Environment="DB_PASSWORD=root12345"|Environment="DB_PASSWORD=${var.rds_password}"|g' /etc/systemd/system/app.service
               sudo sed -i 's|Environment="DB_DATABASE=webapp"|Environment="DB_DATABASE=${var.rds_db_name}"|g' /etc/systemd/system/app.service
-              's|Environment="S3_BUCKET_NAME=csye6225cloud"|Environment="S3_BUCKET_NAME=${aws_s3_bucket.bucket.bucket}"|g'  /etc/systemd/system/app.service
+              sudo sed -i 's|Environment="S3_BUCKET_NAME=csye6225cloud"|Environment="S3_BUCKET_NAME=${aws_s3_bucket.bucket.bucket}"|g'  /etc/systemd/system/app.service
 
               # Reload systemd to recognize the changes
               sudo systemctl daemon-reload
