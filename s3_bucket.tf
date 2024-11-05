@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket = "${uuid()}"
-  force_destroy = true  # allows Terraform to delete the bucket, even if it contains objects
+  bucket        = uuid()
+  force_destroy = true # allows Terraform to delete the bucket, even if it contains objects
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption" {

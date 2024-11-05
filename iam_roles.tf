@@ -18,7 +18,7 @@ resource "aws_iam_role" "ec2_instance_role" {
 
 # CloudWatch Logs Policy
 resource "aws_iam_policy" "cloudwatch_logs_policy" {
-  name   = "CloudWatchLogsPolicy"
+  name = "CloudWatchLogsPolicy"
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -94,7 +94,7 @@ resource "aws_iam_policy" "s3_delete_object_policy" {
         Action = [
           "s3:DeleteObject"
         ],
-        "Resource": "arn:aws:s3:::${aws_s3_bucket.bucket.arn}/*"
+        "Resource" : "arn:aws:s3:::${aws_s3_bucket.bucket.arn}/*"
       }
     ]
   })

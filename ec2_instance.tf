@@ -64,11 +64,11 @@ resource "aws_security_group" "app_security_group" {
 
 # Create EC2 Instance
 resource "aws_instance" "web_app_instance" {
-  ami                    = var.custom_ami  # Use the custom AMI built by Packer
+  ami                    = var.custom_ami # Use the custom AMI built by Packer
   instance_type          = "t2.small"
   subnet_id              = aws_subnet.public_subnet_1.id
   vpc_security_group_ids = [aws_security_group.app_security_group.id]
-  iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name  # Attach instance profile
+  iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name # Attach instance profile
 
   # User data to configure application with RDS
   user_data = base64encode(<<-EOF
