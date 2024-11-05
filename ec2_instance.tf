@@ -24,13 +24,13 @@ resource "aws_security_group" "app_security_group" {
   }
 
   # HTTP Access (Port 80)
-  ingress {
-    description = "Allow HTTP"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   description = "Allow HTTP"
+  #   from_port   = 8080
+  #   to_port     = 8080
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
   # HTTPS Access (Port 443)
   ingress {
     description = "Allow HTTPS"
@@ -66,28 +66,11 @@ resource "aws_security_group" "app_security_group" {
 resource "aws_instance" "web_app_instance" {
   ami                    = var.custom_ami # Use the custom AMI built by Packer
   instance_type          = "t2.small"
-  subnet_id              = aws_subnet.public_subnet_1.id              # Place the instance in one of your public subnets
-  vpc_security_group_ids = [aws_security_group.app_security_group.id] # Attach the security group
+  subnet_id              = aws_subnet.public_subnet_1.id
+  vpc_security_group_ids = [aws_security_group.app_security_group.id]
+  iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name # Attach instance profile
 
-  # Disable protection against accidental termination
-  disable_api_termination = false
-
-  # Root volume settings
-  root_block_device {
-    volume_size           = 25
-    volume_type           = "gp2"
-    delete_on_termination = true
-  }
-
-  # User Data to pass RDS details to the EC2 instance for database connection
-  # user_data = <<-EOF
-  #   #!/bin/bash
-  #   echo "DB_HOST=${aws_db_instance.rds_instance.endpoint}" >> /home/ubuntu/.env
-  #   echo "DB_USER=postgres" >> /home/ubuntu/.env
-  #   echo "DB_PASSWORD=root12345" >> /home/ubuntu/.env
-  #   echo "DB_NAME=webapp" >> /home/ubuntu/.env
-  #   sudo systemctl restart app  # Restart the app to pick up new environment variables
-  # EOF
+  # User data to configure application with RDS
   user_data = base64encode(<<-EOF
               #!/bin/bash
               # Update the app.service file with the new database information
@@ -95,19 +78,34 @@ resource "aws_instance" "web_app_instance" {
               sudo sed -i 's|Environment="DB_USER=postgres"|Environment="DB_USER=${var.rds_username}"|g' /etc/systemd/system/app.service
               sudo sed -i 's|Environment="DB_PASSWORD=root12345"|Environment="DB_PASSWORD=${var.rds_password}"|g' /etc/systemd/system/app.service
               sudo sed -i 's|Environment="DB_DATABASE=webapp"|Environment="DB_DATABASE=${var.rds_db_name}"|g' /etc/systemd/system/app.service
- 
+              's|Environment="S3_BUCKET_NAME=csye6225cloud"|Environment="S3_BUCKET_NAME=${aws_s3_bucket.bucket.bucket}"|g'  /etc/systemd/system/app.service
+
               # Reload systemd to recognize the changes
               sudo systemctl daemon-reload
- 
-              # Restart your application service
+
+              # Restart the application service
               sudo systemctl restart app.service
+              sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+              -a fetch-config \
+              -m ec2 \
+              -c file:/opt/webapp/cloud-watch-config.json \
+              -s
+              sudo chmod 644 /opt/webapp/cloud-watch-config.json
+              sudo chown root:root /opt/webapp/cloud-watch-config.json
+              sudo systemctl enable amazon-cloudwatch-agent
+              sudo systemctl start amazon-cloudwatch-agent
+              sudo systemctl status amazon-cloudwatch-agent
+              sudo systemctl enable mywebapp.service
+              sudo systemctl start mywebapp.service
+              sudo systemctl status mywebapp.service
+              sudo systemctl daemon-reload
               EOF
   )
 
-  # Optional: Add monitoring and instance lifecycle hooks
   monitoring = true
 
   tags = {
     Name = "web_app_instance"
   }
 }
+
