@@ -34,3 +34,35 @@ resource "aws_security_group" "db_security_group" {
 #   security_group_id        = aws_security_group.db_security_group.id  # RDS DB Security Group
 #   source_security_group_id = aws_security_group.app_security_group.id # App Security Group
 # }
+# ALB Security Group
+resource "aws_security_group" "alb_sg" {
+  name        = "alb_security_group"
+  description = "Security group for ALB"
+  vpc_id      = aws_vpc.csye6225_vpc.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "alb_security_group"
+  }
+}
+

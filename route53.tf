@@ -19,12 +19,24 @@ data "aws_route53_zone" "dev_zone" {
 }
 
 # Create an A record for dev.pankhurigupta.me in the existing hosted zone
-resource "aws_route53_record" "app" {
-  zone_id = data.aws_route53_zone.dev_zone.zone_id # Reference the existing zone by ID
-  name    = ""                                     # Root record for dev.pankhurigupta.me
-  type    = "A"
-  ttl     = "300"
-  records = [aws_instance.web_app_instance.public_ip] # Link to EC2 instance's public IP
+# resource "aws_route53_record" "app" {
+#   zone_id = data.aws_route53_zone.dev_zone.zone_id # Reference the existing zone by ID
+#   name    = ""                                     # Root record for dev.pankhurigupta.me
+#   type    = "A"
+#   ttl     = "300"
+#   records = [aws_instance.web_app_instance.public_ip] # Link to EC2 instance's public IP
 
-  depends_on = [aws_instance.web_app_instance]
+#   depends_on = [aws_instance.web_app_instance]
+# }
+
+resource "aws_route53_record" "app" {
+  zone_id = data.aws_route53_zone.dev_zone.zone_id
+  name    = ""
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.web_alb.dns_name
+    zone_id                = aws_lb.web_alb.zone_id
+    evaluate_target_health = true
+  }
 }
