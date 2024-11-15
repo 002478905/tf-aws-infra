@@ -92,9 +92,12 @@ resource "aws_iam_policy" "s3_delete_object_policy" {
       {
         Effect = "Allow",
         Action = [
+          "s3:PutObject",
+          "s3:GetObject",
           "s3:DeleteObject"
         ],
-        "Resource" : "arn:aws:s3:::${aws_s3_bucket.bucket.arn}/*"
+        # "Resource" : "arn:aws:s3:::${aws_s3_bucket.bucket.arn }/*"
+        "Resource" : "*"
       }
     ]
   })

@@ -63,49 +63,49 @@ resource "aws_security_group" "app_security_group" {
 }
 
 # Create EC2 Instance
-resource "aws_instance" "web_app_instance" {
-  ami                    = var.custom_ami # Use the custom AMI built by Packer
-  instance_type          = "t2.small"
-  subnet_id              = aws_subnet.public_subnet_1.id
-  vpc_security_group_ids = [aws_security_group.app_security_group.id]
-  iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name # Attach instance profile
+# resource "aws_instance" "web_app_instance" {
+#   ami                    = var.custom_ami # Use the custom AMI built by Packer
+#   instance_type          = "t2.small"
+#   subnet_id              = aws_subnet.public_subnet_1.id
+#   vpc_security_group_ids = [aws_security_group.app_security_group.id]
+#   iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name # Attach instance profile
 
-  # User data to configure application with RDS
-  user_data = base64encode(<<-EOF
-              #!/bin/bash
-              # Update the app.service file with the new database information
-              sudo sed -i 's|Environment="DB_HOST=localhost"|Environment="DB_HOST=${aws_db_instance.rds_instance.endpoint}"|g' /etc/systemd/system/app.service
-              sudo sed -i 's|Environment="DB_USER=postgres"|Environment="DB_USER=${var.rds_username}"|g' /etc/systemd/system/app.service
-              sudo sed -i 's|Environment="DB_PASSWORD=root12345"|Environment="DB_PASSWORD=${var.rds_password}"|g' /etc/systemd/system/app.service
-              sudo sed -i 's|Environment="DB_DATABASE=webapp"|Environment="DB_DATABASE=${var.rds_db_name}"|g' /etc/systemd/system/app.service
-              's|Environment="S3_BUCKET_NAME=csye6225cloud"|Environment="S3_BUCKET_NAME=${aws_s3_bucket.bucket.bucket}"|g'  /etc/systemd/system/app.service
+#   # User data to configure application with RDS
+#   user_data = base64encode(<<-EOF
+#               #!/bin/bash
+#               # Update the app.service file with the new database information
+#               sudo sed -i 's|Environment="DB_HOST=localhost"|Environment="DB_HOST=${aws_db_instance.rds_instance.endpoint}"|g' /etc/systemd/system/app.service
+#               sudo sed -i 's|Environment="DB_USER=postgres"|Environment="DB_USER=${var.rds_username}"|g' /etc/systemd/system/app.service
+#               sudo sed -i 's|Environment="DB_PASSWORD=root12345"|Environment="DB_PASSWORD=${var.rds_password}"|g' /etc/systemd/system/app.service
+#               sudo sed -i 's|Environment="DB_DATABASE=webapp"|Environment="DB_DATABASE=${var.rds_db_name}"|g' /etc/systemd/system/app.service
+#               's|Environment="S3_BUCKET_NAME=csye6225cloud"|Environment="S3_BUCKET_NAME=${aws_s3_bucket.bucket.bucket}"|g'  /etc/systemd/system/app.service
 
-              # Reload systemd to recognize the changes
-              sudo systemctl daemon-reload
+#               # Reload systemd to recognize the changes
+#               sudo systemctl daemon-reload
 
-              # Restart the application service
-              sudo systemctl restart app.service
-              sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
-              -a fetch-config \
-              -m ec2 \
-              -c file:/opt/webapp/cloud-watch-config.json \
-              -s
-              sudo chmod 644 /opt/webapp/cloud-watch-config.json
-              sudo chown root:root /opt/webapp/cloud-watch-config.json
-              sudo systemctl enable amazon-cloudwatch-agent
-              sudo systemctl start amazon-cloudwatch-agent
-              sudo systemctl status amazon-cloudwatch-agent
-              sudo systemctl enable mywebapp.service
-              sudo systemctl start mywebapp.service
-              sudo systemctl status mywebapp.service
-              sudo systemctl daemon-reload
-              EOF
-  )
+#               # Restart the application service
+#               sudo systemctl restart app.service
+#               sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+#               -a fetch-config \
+#               -m ec2 \
+#               -c file:/opt/webapp/cloud-watch-config.json \
+#               -s
+#               sudo chmod 644 /opt/webapp/cloud-watch-config.json
+#               sudo chown root:root /opt/webapp/cloud-watch-config.json
+#               sudo systemctl enable amazon-cloudwatch-agent
+#               sudo systemctl start amazon-cloudwatch-agent
+#               sudo systemctl status amazon-cloudwatch-agent
+#               sudo systemctl enable app.service
+#               sudo systemctl start app.service
+#               sudo systemctl status app.service
+#               sudo systemctl daemon-reload
+#               EOF
+#   )
 
-  monitoring = true
+#   monitoring = true
 
-  tags = {
-    Name = "web_app_instance"
-  }
-}
+#   tags = {
+#     Name = "web_app_instance"
+#   }
+# }
 
