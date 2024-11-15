@@ -43,7 +43,7 @@ resource "aws_launch_template" "web_app_lt" {
               sudo systemctl enable app.service
               sudo systemctl start app.service
               EOF
-)
+  )
 
 
   tag_specifications {
