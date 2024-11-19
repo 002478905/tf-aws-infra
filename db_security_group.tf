@@ -72,5 +72,5 @@ resource "aws_security_group_rule" "allow_lambda_to_rds" {
   to_port           = 5432
   protocol          = "tcp"
   security_group_id = aws_security_group.db_security_group.id
-    cidr_blocks       = [aws_vpc.csye6225_vpc.cidr_block]  # Replace with the appropriate CIDR block of your Lambda VPC
+  cidr_blocks       = [aws_vpc.csye6225_vpc.cidr_block] # Replace with the appropriate CIDR block of your Lambda VPC
 }
