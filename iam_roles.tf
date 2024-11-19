@@ -15,6 +15,7 @@ resource "aws_iam_role" "ec2_instance_role" {
   })
 }
 
+
 # CloudWatch Logs Policy
 resource "aws_iam_policy" "cloudwatch_logs_policy" {
   name = "CloudWatchLogsPolicy"
@@ -209,7 +210,11 @@ resource "aws_iam_role_policy" "lambda_execution_policy" {
       {
         Effect = "Allow"
         Action = [
-          "rds:*"
+          "rds:*",
+          "ec2:DescribeLaunchTemplates",
+          "ec2:DescribeLaunchTemplateVersions",
+          "ec2:CreateLaunchTemplateVersion",
+          "ec2:ModifyLaunchTemplate"
         ]
         Resource = "*"
       }
