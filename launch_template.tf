@@ -25,7 +25,7 @@ resource "aws_launch_template" "web_app_lt" {
               echo "DB_PASSWORD=${var.rds_password}" >> /home/csye6225/webapp/.env
               echo "DB_DATABASE=${var.rds_db_name}" >> /home/csye6225/webapp/.env
               echo "S3_BUCKET_NAME=${aws_s3_bucket.bucket.bucket}" >> /home/csye6225/webapp/.env
-
+              echo "SNS_TOPIC_ARN=${aws_sns_topic.user_signup_topic.arn}" >> /home/csye6225/webapp/.env
               # Reload the systemd daemon and restart the app service
               sudo systemctl daemon-reload
               sudo systemctl restart app.service

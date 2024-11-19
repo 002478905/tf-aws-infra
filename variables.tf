@@ -126,6 +126,12 @@ variable "family" {
 
 # variables.tf
 
+# variable "rds_host" {
+#   description = "The endpoint of the RDS instance"
+#   type        = string
+# }
+
+
 variable "rds_identifier" {
   description = "The RDS instance identifier"
   type        = string
@@ -167,4 +173,25 @@ variable "rds_password" {
   type        = string
   sensitive   = true
   default     = "root12345"
+}
+
+
+variable "sendgrid_api_key" {
+  description = "The password for the RDS instance"
+  type        = string
+  sensitive   = true
+  default     = "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"
+}
+
+variable "verification_base_url" {
+  description = "The password for the RDS instance"
+  type        = string
+  sensitive   = true
+  default     = ".pankhurigupta.me"
+}
+variable "env" {
+  description = "The password for the RDS instance"
+  type        = string
+  sensitive   = true
+  default     = "dev"
 }
