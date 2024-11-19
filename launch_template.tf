@@ -3,8 +3,8 @@ resource "aws_launch_template" "web_app_lt" {
   image_id      = var.custom_ami
   instance_type = "t2.small"
 
- tags = {
-    Name = "web-app-lt"  # Add this tag to match the workflow filter
+  tags = {
+    Name = "web-app-lt" # Add this tag to match the workflow filter
   }
   network_interfaces {
     associate_public_ip_address = true
