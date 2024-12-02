@@ -189,9 +189,31 @@ variable "verification_base_url" {
   sensitive   = true
   default     = ".pankhurigupta.me"
 }
+# variable "sns_topic_arn" {
+#   description = "ARN of the SNS topic"
+#   type        = string
+# }
 variable "env" {
   description = "The password for the RDS instance"
   type        = string
   sensitive   = true
   default     = "dev"
+}
+
+variable "dev_account_id" {
+  type        = string
+  description = "dev account id"
+}
+
+variable "secrets_manager_name" {
+  type        = string
+  description = "Secrets manager name"
+}
+variable "dev_cert" {
+  type        = string
+  description = "dev certificate "
+}
+variable "demo_cert" {
+  type        = string
+  description = "demo certificate "
 }

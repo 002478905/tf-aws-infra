@@ -19,7 +19,13 @@ Before you can use this project, you need to have the following installed:
 2. [AWS CLI](https://aws.amazon.com/cli/) configured with credentials.
 3. A valid AWS account.
 
-## Installation and Setup
+## Import SSL Certificate for Demo Environment
+
+aws acm import-certificate \
+ --certificate file://certs/demo.pankhurigupta.me/certificate.pem \
+ --private-key file://certs/demo.pankhurigupta.me/private-key.pem \
+ --certificate-chain file://certs/demo.pankhurigupta.me/certificate-chain.pem \
+ --region us-east-1
 
 ### 1. Clone the Repository
 

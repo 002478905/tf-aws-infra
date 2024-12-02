@@ -1,9 +1,10 @@
 
 resource "aws_autoscaling_group" "web_asg" {
-  name                = "web-app-asg"
-  vpc_zone_identifier = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id, aws_subnet.public_subnet_3.id]
-  target_group_arns   = [aws_lb_target_group.web_tg.arn]
-  health_check_type   = "ELB"
+  name                      = "web-app-asg"
+  vpc_zone_identifier       = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id, aws_subnet.public_subnet_3.id]
+  target_group_arns         = [aws_lb_target_group.web_tg.arn]
+  health_check_type         = "ELB"
+  health_check_grace_period = 1200
 
   min_size         = 3
   max_size         = 5
