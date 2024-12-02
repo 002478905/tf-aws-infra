@@ -59,8 +59,8 @@ resource "aws_kms_key" "ec2_key" {
   }
 
 }
- 
- 
+
+
 
 resource "aws_kms_key" "rds_key" {
   description             = "KMS key for RDS instances"

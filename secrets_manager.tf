@@ -14,7 +14,7 @@ resource "random_password" "db_password" {
 
 # Store the database password in Secrets Manager
 resource "aws_secretsmanager_secret" "db_password" {
-   name        = "db-password-${random_id.suffix.hex}"
+  name = "db-password-${random_id.suffix.hex}"
   #name        = var.secrets_manager_name
   description = "Database password for RDS instance"
   kms_key_id  = aws_kms_key.secrets_key.arn
@@ -32,10 +32,10 @@ resource "aws_secretsmanager_secret_version" "db_password" {
 resource "aws_secretsmanager_secret_version" "lambda_credentials" {
   secret_id = aws_secretsmanager_secret.db_password.id
   secret_string = jsonencode({
-  POSTGRES_PASSWORD = random_password.db_password.result
-    SENDGRID_API_KEY     = var.sendgrid_api_key
+    POSTGRES_PASSWORD     = random_password.db_password.result
+    SENDGRID_API_KEY      = var.sendgrid_api_key
     VERIFICATION_BASE_URL = var.verification_base_url
-    SNS_TOPIC_ARN        = aws_sns_topic.user_signup_topic.arn
+    SNS_TOPIC_ARN         = aws_sns_topic.user_signup_topic.arn
   })
 }
 resource "aws_secretsmanager_secret_version" "domain_version" {

@@ -102,7 +102,7 @@ resource "aws_iam_policy" "s3_delete_object_policy" {
       {
         Effect = "Allow",
         Action = [
-           "kms:Decrypt",
+          "kms:Decrypt",
           "kms:GenerateDataKey"
         ]
         Resource = aws_kms_key.s3_key.arn
@@ -136,7 +136,7 @@ resource "aws_iam_role" "lambda_execution_role" {
           Service = "lambda.amazonaws.com"
         }
       },
-    
+
     ]
   })
 }
@@ -228,7 +228,7 @@ resource "aws_iam_role_policy" "lambda_execution_policy" {
         Resource = "*"
       },
       {
-       
+
         Effect   = "Allow"
         Action   = "secretsmanager:GetSecretValue"
         Resource = aws_secretsmanager_secret.db_password.arn
@@ -338,7 +338,7 @@ resource "aws_kms_key" "kms_key" {
       "Action" : "kms:*",
       "Resource" : "*"
       },
-       {
+      {
         "Sid" : "AllowLambdaAccess",
         "Effect" : "Allow",
         "Principal" : {
@@ -422,7 +422,7 @@ resource "aws_iam_policy" "lambda_secrets_manager_access" {
           "secretsmanager:DescribeSecret"
         ]
         Resource = [aws_secretsmanager_secret.db_password.arn,
-        aws_secretsmanager_secret.sendgrid_api_key.arn,
+          aws_secretsmanager_secret.sendgrid_api_key.arn,
         aws_secretsmanager_secret.domain_name.arn]
       },
       {
@@ -503,7 +503,7 @@ resource "aws_iam_role_policy" "my_kms_access_policy" {
 resource "aws_iam_role_policy" "my_rds_access_policy" {
   name = "my_rds_access_policy"
   role = aws_iam_role.ec2_instance_role.id
- 
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -522,17 +522,17 @@ resource "random_id" "secret_suffix" {
 }
 resource "aws_secretsmanager_secret" "sendgrid_api_key" {
   #  name        = "sendgrid-api-key-${random_id.secret_suffix.hex}"
-    name        = "sendgrid-api-key"
+  name        = "sendgrid-api-key"
   description = "SendGrid API Key for email service"
   kms_key_id  = aws_kms_key.secrets_key.arn
- 
+
 }
 resource "aws_secretsmanager_secret" "domain_name" {
   #  name        = "sendgrid-api-key-${random_id.secret_suffix.hex}"
-    name        = "domain_name"
+  name        = "domain_name"
   description = "Domain name for email service"
   kms_key_id  = aws_kms_key.secrets_key.arn
- 
+
 }
 resource "aws_secretsmanager_secret_version" "sendgrid_api_key" {
   secret_id     = aws_secretsmanager_secret.sendgrid_api_key.name
@@ -540,34 +540,34 @@ resource "aws_secretsmanager_secret_version" "sendgrid_api_key" {
 }
 resource "aws_iam_policy" "lambda_secrets_access" {
   name = "lambda_secrets_access"
-# policy = jsonencode({
-#     Version = "2012-10-17",
-#     Statement = [
-#       {
-#         Effect = "Allow",
-#         Action = [
-#           "secretsmanager:GetSecretValue",
-#           "secretsmanager:DescribeSecret"
-#         ],
-#         Resource = [
-#           aws_secretsmanager_secret.sendgrid_api_key.arn,
-#           # aws_secretsmanager_secret.db_password.arn,       
-#         ]
-#       },
-#        {
-#         Effect   = "Allow",
-#         Action   = ["kms:Decrypt","kms:DescribeKey"],
+  # policy = jsonencode({
+  #     Version = "2012-10-17",
+  #     Statement = [
+  #       {
+  #         Effect = "Allow",
+  #         Action = [
+  #           "secretsmanager:GetSecretValue",
+  #           "secretsmanager:DescribeSecret"
+  #         ],
+  #         Resource = [
+  #           aws_secretsmanager_secret.sendgrid_api_key.arn,
+  #           # aws_secretsmanager_secret.db_password.arn,       
+  #         ]
+  #       },
+  #        {
+  #         Effect   = "Allow",
+  #         Action   = ["kms:Decrypt","kms:DescribeKey"],
 
-#         Resource =aws_kms_key.secrets_key.arn
-#       }
-#     ]
-#   })
+  #         Resource =aws_kms_key.secrets_key.arn
+  #       }
+  #     ]
+  #   })
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
-        Action = ["secretsmanager:GetSecretValue","secretsmanager:DescribeSecret"]
+        Effect   = "Allow"
+        Action   = ["secretsmanager:GetSecretValue", "secretsmanager:DescribeSecret"]
         Resource = aws_secretsmanager_secret.sendgrid_api_key.arn
       },
       #   {Action = [
@@ -577,13 +577,13 @@ resource "aws_iam_policy" "lambda_secrets_access" {
       #   Resource = "arn:aws:secretsmanager:us-east-1:${var.dev_account_id}:secret:${var.user_creation_secret_name}-*"
       # },
       {
-        Effect = "Allow"
-        Action = ["secretsmanager:GetSecretValue","secretsmanager:DescribeSecret"]
+        Effect   = "Allow"
+        Action   = ["secretsmanager:GetSecretValue", "secretsmanager:DescribeSecret"]
         Resource = aws_secretsmanager_secret.db_password.arn
       },
       {
-        Effect = "Allow"
-        Action =  ["kms:Decrypt","kms:DescribeKey"]
+        Effect   = "Allow"
+        Action   = ["kms:Decrypt", "kms:DescribeKey"]
         Resource = aws_kms_key.secrets_key.arn
       }
     ]
@@ -595,8 +595,8 @@ resource "aws_iam_role_policy_attachment" "lambda_secrets_policy_attach" {
   role       = aws_iam_role.lambda_execution_role.name
 }
 resource "aws_iam_role_policy_attachment" "ec2_secrets_policy_attachment" {
-   role = aws_iam_role.ec2_instance_role.name
-   policy_arn= aws_iam_policy.lambda_secrets_access.arn
+  role       = aws_iam_role.ec2_instance_role.name
+  policy_arn = aws_iam_policy.lambda_secrets_access.arn
 }
 # resource "aws_iam_role_policy_attachment" "ec2_secrets_policy_attachment" {
 #    role = aws_iam_role.ec2_instance_role.name
