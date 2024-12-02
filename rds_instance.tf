@@ -6,7 +6,7 @@ resource "aws_db_instance" "rds_instance" {
   allocated_storage      = 20
   db_name                = "webapp"
   username               = "postgres"
-  password               = "root12345"
+  password               = random_password.db_password.result
   db_subnet_group_name   = aws_db_subnet_group.private_subnet_group.name
   vpc_security_group_ids = [aws_security_group.db_security_group.id]
   publicly_accessible    = false
@@ -14,7 +14,8 @@ resource "aws_db_instance" "rds_instance" {
 
   # Attach the parameter group here
   parameter_group_name = aws_db_parameter_group.parameter-group.name
-
+  storage_encrypted    = true
+  kms_key_id           = aws_kms_key.rds_key.arn
   tags = {
     Name = "csye6225-db"
   }
