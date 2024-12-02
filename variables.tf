@@ -204,6 +204,10 @@ variable "dev_account_id" {
   type        = string
   description = "dev account id"
 }
+variable "demo_account_id" {
+  type        = string
+  description = "demo account id"
+}
 
 variable "secrets_manager_name" {
   type        = string
