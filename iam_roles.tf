@@ -333,7 +333,7 @@ resource "aws_kms_key" "kms_key" {
       "Sid" : "Enable IAM User Permissions",
       "Effect" : "Allow",
       "Principal" : {
-        "AWS" : "arn:aws:iam::${var.dev_account_id}:root"
+        "AWS" : "arn:aws:iam::${var.demo_account_id}:root"
       },
       "Action" : "kms:*",
       "Resource" : "*"
